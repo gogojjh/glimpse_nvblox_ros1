@@ -7,7 +7,7 @@
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find nvblox_ros)/config/rosconsole.config"/>
   <arg name="tsdf_voxel_update_method" default="5" />
   <arg name="voxel_size" default="0.25" />
-  <arg name="max_mesh_update_time" default="0.0" />
+  <arg name="max_mesh_update_time" default="10.0" />
   <arg name="performance_monitor" default="false" />
 
   <!-- ROS Param -->
@@ -40,12 +40,12 @@
   <include file="$(find pointcloud_image_converter)/launch/pc2img_fusionportable_1024.launch" />
 
   <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" 
-    args="-d $(find nvblox_ros)/../../rviz_cfg/cobra_fusionportable.rviz" respawn="true"/>
+    args="-d $(find nvblox_ros)/rviz/cobra_fusionportable.rviz" respawn="true"/>
 
   <!-- ROSBag -->
 	<arg name="play_bag_rate" default="1.0" />
 	<arg name="play_bag_start" default="0.0" />
-	<arg name="bag_file_use" default="false" />
+	<arg name="bag_file_use" default="true" />
 	<arg name="bag_file" default="/tmp/fusionportable.bag" />
 
   <group if="$(arg bag_file_use)">

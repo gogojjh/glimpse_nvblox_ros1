@@ -4,13 +4,11 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Axis1/TF1
         - /Axis1/TF1/Frames1
         - /r3live1
-        - /pc2img1
         - /nvblox1
-      Splitter Ratio: 0.6598360538482666
-    Tree Height: 383
+      Splitter Ratio: 0.6413934230804443
+    Tree Height: 680
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -28,7 +26,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: laserMap
+    SyncSource: HeightImg
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -40,15 +38,15 @@ Visualization Manager:
       Displays:
         - Alpha: 1
           Class: rviz/Axes
-          Enabled: true
+          Enabled: false
           Length: 3
           Name: Axes
           Radius: 0.30000001192092896
           Reference Frame: <Fixed Frame>
           Show Trail: false
-          Value: true
-        - Alpha: 0.5
-          Cell Size: 3
+          Value: false
+        - Alpha: 1
+          Cell Size: 5
           Class: rviz/Grid
           Color: 160; 160; 164
           Enabled: true
@@ -60,33 +58,57 @@ Visualization Manager:
           Offset:
             X: 0
             Y: 0
-            Z: -1
+            Z: -1.5
           Plane: XY
           Plane Cell Count: 10
-          Reference Frame: <Fixed Frame>
+          Reference Frame: body_imu
           Value: true
         - Class: rviz/TF
           Enabled: true
+          Filter (blacklist): ""
+          Filter (whitelist): ""
           Frame Timeout: 15
           Frames:
             All Enabled: false
-            body_imu:
+            bodyimu:
               Value: true
-            camera:
+            frame_cam00:
               Value: true
-            world:
+            frame_cam01:
+              Value: true
+            os_sensor:
+              Value: true
+            osimu00:
+              Value: true
+            ouster00:
+              Value: true
+            r3live_bodyimu:
+              Value: true
+            r3live_camera:
+              Value: true
+            r3live_world:
               Value: true
           Marker Alpha: 1
-          Marker Scale: 5
+          Marker Scale: 10
           Name: TF
           Show Arrows: true
           Show Axes: true
           Show Names: true
           Tree:
-            world:
-              body_imu:
+            ouster00:
+              frame_cam00:
+                bodyimu:
+                  {}
+                frame_cam01:
+                  {}
+              os_sensor:
                 {}
-              camera:
+              osimu00:
+                {}
+            r3live_world:
+              r3live_bodyimu:
+                {}
+              r3live_camera:
                 {}
           Update Interval: 0
           Value: true
@@ -94,34 +116,6 @@ Visualization Manager:
       Name: Axis
     - Class: rviz/Group
       Displays:
-        - Alpha: 0.699999988079071
-          Autocompute Intensity Bounds: true
-          Autocompute Value Bounds:
-            Max Value: 10
-            Min Value: -10
-            Value: true
-          Axis: Z
-          Channel Name: intensity
-          Class: rviz/PointCloud2
-          Color: 255; 255; 255
-          Color Transformer: Intensity
-          Decay Time: 0
-          Enabled: false
-          Invert Rainbow: false
-          Max Color: 255; 255; 255
-          Min Color: 0; 0; 0
-          Name: LaserScanRegRaw
-          Position Transformer: XYZ
-          Queue Size: 10
-          Selectable: true
-          Size (Pixels): 1
-          Size (m): 0.009999999776482582
-          Style: Points
-          Topic: /r3live/cloud_registered_raw
-          Unreliable: false
-          Use Fixed Frame: true
-          Use rainbow: true
-          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -134,7 +128,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: FlatColor
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -146,6 +140,34 @@ Visualization Manager:
           Size (m): 0.009999999776482582
           Style: Points
           Topic: /r3live/cloud_raw
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: reflectivity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: LaserScanRegRaw
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 1.5
+          Size (m): 0.009999999776482582
+          Style: Points
+          Topic: /r3live/cloud_registered_raw
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -162,7 +184,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 20
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
@@ -177,7 +199,7 @@ Visualization Manager:
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -208,7 +230,7 @@ Visualization Manager:
           Value: false
         - Class: rviz/Image
           Enabled: false
-          Image Topic: /stereo/frame_left/image_raw
+          Image Topic: /r3live/track_img
           Max Value: 1
           Median window: 5
           Min Value: 0
@@ -277,47 +299,50 @@ Visualization Manager:
           Topic: /r3live/aft_mapped_to_init
           Unreliable: false
           Value: false
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Image
+              Enabled: true
+              Image Topic: /pc2img/height_image
+              Max Value: 1
+              Median window: 5
+              Min Value: 0
+              Name: HeightImg
+              Normalize Range: true
+              Queue Size: 2
+              Transport Hint: raw
+              Unreliable: false
+              Value: true
+            - Class: rviz/Image
+              Enabled: true
+              Image Topic: /pc2img/depth_image
+              Max Value: 1
+              Median window: 5
+              Min Value: 0
+              Name: DepthImg
+              Normalize Range: true
+              Queue Size: 2
+              Transport Hint: raw
+              Unreliable: false
+              Value: true
+            - Class: rviz/Image
+              Enabled: false
+              Image Topic: /pc2img/semantic_image
+              Max Value: 1
+              Median window: 5
+              Min Value: 0
+              Name: SemanticImg
+              Normalize Range: true
+              Queue Size: 2
+              Transport Hint: raw
+              Unreliable: false
+              Value: false
+          Enabled: true
+          Name: pc2img
       Enabled: true
       Name: r3live
     - Class: rviz/Group
       Displays:
-        - Class: rviz/Image
-          Enabled: true
-          Image Topic: /pc2img/height_image
-          Max Value: 1
-          Median window: 5
-          Min Value: 0
-          Name: HeightImg
-          Normalize Range: true
-          Queue Size: 2
-          Transport Hint: raw
-          Unreliable: false
-          Value: true
-        - Class: rviz/Image
-          Enabled: true
-          Image Topic: /pc2img/depth_image
-          Max Value: 1
-          Median window: 5
-          Min Value: 0
-          Name: DepthImg
-          Normalize Range: true
-          Queue Size: 2
-          Transport Hint: raw
-          Unreliable: false
-          Value: true
-      Enabled: true
-      Name: pc2img
-    - Class: rviz/Group
-      Displays:
-        - Ceiling Height: 0
-          Class: nvblox_rviz_plugin/NvbloxMesh
-          Cut Ceiling: false
-          Enabled: true
-          Name: NvbloxMesh
-          Queue Size: 10
-          Topic: ""
-          Unreliable: false
-          Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -328,31 +353,80 @@ Visualization Manager:
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: ""
+          Color Transformer: Intensity
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 255; 255; 255
           Min Color: 0; 0; 0
-          Name: PointCloud2
-          Position Transformer: ""
+          Name: pc_esdf
+          Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
           Size (m): 0.009999999776482582
-          Style: Flat Squares
-          Topic: ""
+          Style: Points
+          Topic: /nvblox_ros/pointcloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
+          Value: false
+        - Ceiling Height: 0
+          Class: nvblox_rviz_plugin/NvbloxMesh
+          Cut Ceiling: false
+          Enabled: true
+          Name: NvbloxMesh
+          Queue Size: 10
+          Topic: /nvblox_ros/mesh
+          Unreliable: false
           Value: true
       Enabled: true
       Name: nvblox
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Image
+          Enabled: false
+          Image Topic: /segnet/semantic_image
+          Max Value: 1
+          Median window: 5
+          Min Value: 0
+          Name: SegmentImg
+          Normalize Range: true
+          Queue Size: 2
+          Transport Hint: raw
+          Unreliable: false
+          Value: false
+        - Class: rviz/Image
+          Enabled: false
+          Image Topic: /segnet/uncertainty_image
+          Max Value: 1
+          Median window: 5
+          Min Value: 0
+          Name: SegmentUctImg
+          Normalize Range: true
+          Queue Size: 2
+          Transport Hint: raw
+          Unreliable: false
+          Value: false
+      Enabled: true
+      Name: segnet
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /stereo/frame_left/semantic_rgb_image
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: LeftCamerSemantic
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: world
+    Fixed Frame: r3live_world
     Frame Rate: 30
   Name: root
   Tools:
@@ -376,7 +450,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 45.721229553222656
+      Distance: 31.238479614257812
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -384,32 +458,40 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 2.3145174980163574
-        Y: -8.829751014709473
-        Z: -6.993014812469482
+        X: -2.333638906478882
+        Y: 1.6522828340530396
+        Z: 0.6856098175048828
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6997972726821899
-      Target Frame: body_imu
-      Yaw: 2.068559169769287
+      Pitch: 0.6253980994224548
+      Target Frame: r3live_bodyimu
+      Yaw: 1.4853979349136353
     Saved: ~
 Window Geometry:
   DepthImg:
     collapsed: false
   Displays:
-    collapsed: false
-  Height: 1031
+    collapsed: true
+  Height: 1102
   HeightImg:
     collapsed: false
-  Hide Left Dock: false
+  Hide Left Dock: true
   Hide Right Dock: true
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000026b000003b1fc020000000bfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b000001ba000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d00610067006502000005000000025800000280000001e0fb00000010004400650070007400680049006d006701000001fb000000fc0000001600fffffffb000000120048006500690067006800740049006d006701000002fd000000ef0000001600ffffff000000010000010f000003c0fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000027000003c0000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003ac0000003efc0100000002fb0000000800540069006d00650000000000000003ac0000035c00fffffffb0000000800540069006d00650100000000000004500000000000000000000004e0000003b100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  LeftCamerSemantic:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd0000000400000000000001ea000002e3fc0200000009fb0000001200530065006c0065006300740069006f006e000000012e000000c30000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730000000150000002e3000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d00610067006502000005000000025800000280000001e0000000010000010f000002e3fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000150000002e3000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000005680000010ffc0100000009fb00000014004c00650066007400430061006d0065007200610000000000000001f00000000000000000fb00000022004c00650066007400430061006d0065007200530065006d0061006e0074006900630100000000000001be000000c300fffffffb00000014005300650067006d0065006e00740049006d006700000000ee000001020000009900fffffffb0000001a005300650067006d0065006e00740055006300740049006d0067000000012c000000fd000000ad00fffffffb0000001600530065006d0061006e0074006900630049006d00670000000178000001160000009c00fffffffb00000010004400650070007400680049006d006701000001c4000001bf0000008800fffffffb000000120048006500690067006800740049006d00670100000389000001df0000008b00fffffffb0000000a0049006d0061006700650100000573000001e00000000000000000fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003ac0000003efc0100000002fb0000000800540069006d00650000000000000003ac0000035c00fffffffb0000000800540069006d0065010000000000000450000000000000000000000568000002e300000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  SegmentImg:
+    collapsed: false
+  SegmentUctImg:
+    collapsed: false
   Selection:
+    collapsed: false
+  SemanticImg:
     collapsed: false
   Time:
     collapsed: false
@@ -417,6 +499,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1873
-  X: 45
-  Y: 24
+  Width: 1384
+  X: 1902
+  Y: 313

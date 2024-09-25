@@ -397,7 +397,6 @@ void NvbloxLidarNode::ProcessLidarDataQueue() {
       mutex_lidar_data_.unlock();
       continue;
     }
-    std::cout << "Timestamp: " << timestamp << std::endl;
     Transform T_BW_sensor = T_BaseFrame_PoseFrame_ * T_W_sensor;
     LOG_EVERY_N(INFO, 100) << "Position: (" << T_BW_sensor(0, 3) << ", "
                            << T_BW_sensor(1, 3) << ", " << T_BW_sensor(2, 3)
@@ -611,7 +610,7 @@ void NvbloxLidarNode::ProcessLidarDataQueue() {
       }
     }
 
-    LOG(INFO) << "Integrating frame " << frame_number_;
+    DLOG(INFO) << "Integrating frame " << frame_number_;
     frame_number_++;
   }
 }
@@ -634,8 +633,8 @@ void NvbloxLidarNode::ProcessSemanticImage(
     Transform T_W_sensor;
     if (!transformer_ptr_->lookupTransformToGlobalFrame(target_frame, timestamp,
                                                         &T_W_sensor)) {
-      // LOG(WARNING) << "No transform from " << global_frame_ << " to "
-      //              << target_frame << " found. Stamp = " << timestamp;
+      LOG(WARNING) << "No transform from " << global_frame_ << " to "
+                   << target_frame << " found. Stamp = " << timestamp;
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       return;
     }

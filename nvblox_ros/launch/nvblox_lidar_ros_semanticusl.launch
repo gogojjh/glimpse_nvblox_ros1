@@ -34,12 +34,12 @@
   <include file="$(find pointcloud_image_converter)/launch/pc2img_semanticusl.launch" />
 
   <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizGA" 
-    args="-d $(find nvblox_ros)/../../rviz_cfg/cobra_semantickitti.rviz" respawn="true"/>
+    args="-d $(find nvblox_ros)/rviz/cobra_semantickitti.rviz" respawn="true"/>
 
 	<!-- ROSBag -->
 	<arg name="play_bag_rate" default="1.0" />
 	<arg name="play_bag_start" default="0.0" />
-	<arg name="bag_file_use" default="false" />
+	<arg name="bag_file_use" default="true" />
 	<arg name="bag_file" default="/Spy/dataset/SemanticUSL" />
 
   <group if="$(arg bag_file_use)">
