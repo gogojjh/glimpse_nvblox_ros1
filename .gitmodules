@@ -1,0 +1,4 @@
+[submodule "nvblox"]
+	path = nvblox
+	url = git@github.com:gogojjh/nvblox.git
+       branch = nvblox_dev_semantic

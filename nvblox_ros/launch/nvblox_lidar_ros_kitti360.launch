@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <arg name="use_sim_time" default="true" doc="Path to the ROS bag dataset to run SLAM on."/>
+  <arg name="default_param_file" 
+    value="$(find nvblox_ros)/config/parameters_lidar_kitti360.yaml"/>
+  <arg name="output" default="screen" doc="Output target: screen or log."/>
+
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find nvblox_ros)/config/rosconsole.config"/>
+
+  <rosparam command="load" file="$(arg default_param_file)"/> 
+  <param name="use_sim_time" value="$(arg use_sim_time)"/>
+
+  <!-- Launch the nvblox node. --> 
+  <node pkg="nvblox_ros" type="nvblox_lidar_node" name="nvblox_lidar_node"
+    respawn="false" ns="nvblox_ros" output="$(arg output)" >
+    <remap from="depth_image" to="/pc2img/depth_image" />
+    <remap from="height_image" to="/pc2img/height_image" />
+    <remap from="lidar_camera_info" to="/pc2img/lidar_camera_info" />
+    <remap from="semantic_image" to="/kitti360/left_camera/semantic_image" />
+    <remap from="semantic_camera_info" to="/kitti360/left_camera/camera_info" />
+    <remap from="color_image" to="/kitti360/left_camera/image" />
+    <remap from="color_camera_info" to="/kitti360/left_camera/camera_info" />    
+    <remap from="odometry" to="/kitti360/odom_pose" />
+  </node>
+
+	<!-- ROSBag -->
+	<arg name="play_bag_rate" default="1.0" />
+	<arg name="play_bag_start" default="0.0" />
+	<arg name="bag_file_use" default="true" />
+	<arg name="bag_folder" 
+	  default="/Spy/dataset/KITTI/KITTI-360" />
+	<arg name="bag_file" default="2013_05_28_drive_0003_sync.bag" />
+
+  <group if="$(arg bag_file_use)">
+    <node pkg="rosbag" type="play" name="rosbag" 
+      args="$(arg bag_folder)/$(arg bag_file) --pause --clock
+            -r $(arg play_bag_rate)  
+            -s $(arg play_bag_start)" 
+      required="true" 
+      output="screen"/>
+	</group>
+
+  <include file="$(find pointcloud_image_converter)/launch/pc2img_kitti360.launch" />
+
+</launch>

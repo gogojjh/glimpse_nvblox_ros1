@@ -1,0 +1,67 @@
+global_frame: map
+pose_frame: velodyne
+
+# Parameters: GPU/CPU programming
+memory_checking_period: 5 # seconds, not used
+max_meshing_height: 10000 # meters, not used
+memory_purge_threshold: 2048 # in MB,
+
+# Parameters: integration 
+slice_height: 0.75 # meters
+min_height: 0.5
+max_height: 1.0
+esdf: false
+esdf_2d: false
+distance_slice: false
+mesh: true
+voxel_size: 0.25 # 0.05
+tsdf_integrator_max_integration_distance_m: 70.0 # do not change
+tsdf_integrator_truncation_distance_vox: 5.0 # when increase it populates faster but so noisy
+tsdf_integrator_max_weight: 100.0 # higher is better for high quality
+semantic_integration: true
+semantic_integrator_max_integration_distance_m: 70.0
+semantic_integrator_truncation_distance_vox: 5.0
+semantic_integrator_max_weight: 100.0 
+color_integration: false
+color_integrator_max_integration_distance_m: 30.0
+color_integrator_truncation_distance_vox: 10.0
+color_integrator_max_weight: 10.0
+mesh_integrator_min_weight: 0.00001
+mesh_integrator_weld_vertices: true
+esdf_integrator_min_weight: 2.0
+esdf_integrator_max_distance_m: 30.0
+esdf_integrator_max_site_distance_vox: 37.0
+ray_tracing_enabled: true
+bayesian_semantics_enabled: true
+
+semantic_sensor_source: 1 # 0: camera; 1: lidar
+dataset_type: 5 # 0: FusionPortable
+                # 1: SemanticFusionPortable
+                # 2: KITTI
+                # 3: SemanticKITTI
+                # 4: KITTI-360
+                # 5: SemanticUSL
+                # 6: CityScapes
+tsdf_voxel_update_method: 5 # Projective distance:
+                            #  1: (original) constant weight, truncate the fused_distance
+                            #  2: constant weight, truncate the voxel_distance_measured
+                            #  3: linear weight, truncate the voxel_distance_measured
+                            #  4: exponential weight, truncate the voxel_distance_measured
+                            # Non-Projective distance:
+                            #  5: weight and distance derived from VoxField
+                            #  6: linear weight, distance derived from VoxField
+
+# Parameters: update frequency of integration 
+max_tsdf_update_hz: 0.0
+max_color_update_hz: 0.0
+max_mesh_update_hz: 0.0
+max_esdf_update_hz: 0.0
+max_mesh_update_time: -1.0
+
+use_tf_transforms: true
+use_topic_transforms: true
+
+log_dir: "/Spy/dataset/tmp/logs/"
+output_dir: "/Spy/dataset/tmp/" 
+
+performance_monitor: false

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <arg name="use_sim_time" default="true" />
+  <arg name="default_param_file" value="$(find nvblox_ros)/config/parameters_lidar_maicity.yaml"/>
+  <arg name="output" default="screen" doc="Output target: screen or log."/>
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find nvblox_ros)/config/rosconsole.config"/>
+  <arg name="tsdf_voxel_update_method" default="6" />
+  <arg name="voxel_size" default="0.25" />
+  <arg name="max_mesh_update_time" default="0.0" />
+  <arg name="performance_monitor" default="false" />
+
+  <!-- ROS Param -->
+  <param name="use_sim_time" value="$(arg use_sim_time)"/>
+
+  <!-- Launch the nvblox node. --> 
+  <node pkg="nvblox_ros" type="nvblox_lidar_node" name="nvblox_lidar_node" 
+    respawn="false" clear_params="true" output="$(arg output)" >
+    <remap from="depth_image" to="/pc2img/depth_image" />
+    <remap from="height_image" to="/pc2img/height_image" />
+    <remap from="lidar_camera_info" to="/pc2img/lidar_camera_info" />
+    <remap from="odometry" to="/odom" />
+    <rosparam command="load" file="$(arg default_param_file)"/> 
+    <param name="tsdf_voxel_update_method" value="$(arg tsdf_voxel_update_method)" />
+    <param name="voxel_size" value="$(arg voxel_size)" />  
+    <param name="max_mesh_update_time" value="$(arg max_mesh_update_time)" />
+    <param name="performance_monitor" value="$(arg performance_monitor)" />
+  </node>
+
+  <include file="$(find pointcloud_image_converter)/launch/pc2img_maicity.launch" />
+
+  <!-- ROSBag -->
+	<arg name="play_bag_rate" default="1.0" />
+	<arg name="play_bag_start" default="0.0" />
+	<arg name="bag_file_use" default="false" />
+	<arg name="bag_file" default="/tmp/maicity.bag" />
+
+  <group if="$(arg bag_file_use)">
+  <node pkg="rosbag" type="play" name="player" 
+		args="$(arg bag_file) --clock
+					-r $(arg play_bag_rate)  
+					-s $(arg play_bag_start)" 
+		required="true" 
+    output="screen"/>
+	</group>
+
+  <node pkg="tf" type="static_transform_publisher" name="tf_vehicle_2_lidar" 
+    args="0 0 0 0 0 0 frame_cam00 camera 100" />
+
+</launch>
